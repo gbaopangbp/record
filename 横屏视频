@@ -1,0 +1,27 @@
+最近项目中，需要全屏横屏播放视屏，但是项目只支持竖屏。
+解决方法，项目还是只支持竖屏就行，不需要支持横屏。只需要设置播放器view的frame就行，并且将view的transform旋转90度就行。
+
+代码：
+        //view的宽度为横屏需要的宽高，不要反了
+        _rtmpPlayer.view.frame = CGRectMake(0, 0, UIScreen_H, UIScreen_W);
+	//设置中心点,frame的设置可以一步到位，不再设置中心点，但是需要计算起点，比较麻烦。还不如再设置一下，将view移到屏幕中心点，再旋转一步就行，
+        _rtmpPlayer.view.center = CGPointMake(UIScreen_W/2.0, UIScreen_H/2.0);
+        //再旋转90度
+	CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI/2);
+        [_rtmpPlayer.view setTransform:transform];
+
+
+ps：全屏时需要隐藏状态栏，ios7实现
+
+	//使系统调用prefersStatusBarHidden
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        // iOS 7
+        [self prefersStatusBarHidden];
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    }
+
+//viewcontroller的方法，判断是否隐藏状态栏
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
